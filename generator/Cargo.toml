@@ -1,9 +1,8 @@
 [package]
-name = "comp353_gen"
+name = "generator"
 version = "0.1.0"
 authors = ["Frederic Desgreniers <fredericdesgreniers@gmail.com>"]
 
 [dependencies]
-generator = {path="generator"}
-rand = "0.5.4"
 failure = "0.1.1"
+rand = "0.5.4"
