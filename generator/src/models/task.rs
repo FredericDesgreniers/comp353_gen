@@ -10,6 +10,7 @@ pub struct Task {
 
 #[derive(Debug, RandField)]
 #[choices("Set up infrastructure for client", "Provisioning of resources", "Assigning tasks to resources", "Allocating a dedicated point of contact")]
+#[convert(from)]
 pub struct TaskType(pub String);
 
 impl ToSqls for Task {

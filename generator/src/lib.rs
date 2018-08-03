@@ -91,7 +91,7 @@ impl Generator {
 						contact_num: String::from("5149108628"),
 						acv: 0.0,
 						ia: 0.0,
-						start_date: String::from("2017-01-01"),
+						start_date: RandField::random(),
 						service_type: RandField::random(),
 						contract_type: RandField::random(),
 						line_of_business: RandField::random(),

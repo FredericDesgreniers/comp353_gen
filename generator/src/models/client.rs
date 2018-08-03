@@ -1,6 +1,8 @@
 use super::person::PersonName;
 use models::ToSqls;
 use rand_field::RandField;
+use rand::Rng;
+use rand::ThreadRng;
 
 pub struct ClientName(pub String);
 
@@ -56,15 +58,33 @@ impl ToSqls for Client {
 
 #[derive(Clone, RandField)]
 #[choices("Premium", "Gold", "Diamond", "Silver")]
+#[convert(from)]
 pub struct ContractType(pub String);
 
 #[derive(RandField)]
 #[choices("Cloud", "On-premises")]
+#[convert(from)]
 pub struct ServiceType(pub String);
 
 #[derive(RandField)]
 #[choices("CloudServices", "Development", "Research")]
+#[convert(from)]
 pub struct LineOfBusiness(pub String);
+
+pub struct Date(pub String);
+
+impl RandField for Date {
+	fn random() -> Self {
+		let mut rng = ::rand::thread_rng();
+
+		let year = rng.gen_range(2015, 2019);
+		let month = rng.gen_range(0, 12);
+		let day = rng.gen_range(1, 28);
+
+		Date(format!("{:04}-{:02}-{:02}", year, month, day))
+
+	}
+}
 
 pub struct Contract {
 	pub id: usize,
@@ -72,7 +92,7 @@ pub struct Contract {
 	pub contact_num: String,
 	pub acv: f64,
 	pub ia: f64,
-	pub start_date: String,
+	pub start_date: Date,
 	pub service_type: ServiceType,
 	pub contract_type: ContractType,
 	pub line_of_business: LineOfBusiness,
@@ -88,7 +108,7 @@ impl ToSqls for Contract {
 				contact_num=self.contact_num,
 				acv=self.acv,
 				ia=self.ia,
-				start_date=self.start_date,
+				start_date=self.start_date.0,
 				service_type=self.service_type.0,
 				contract_type=self.contract_type.0,
 				line_of_business=self.line_of_business.0,

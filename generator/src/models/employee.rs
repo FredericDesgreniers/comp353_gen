@@ -139,10 +139,12 @@ impl ToSqls for Manager {
 
 #[derive(RandField)]
 #[choices("Premium", "Silver", "Normal")]
+#[convert(from)]
 pub struct Insurance(pub String);
 
 #[derive(RandField)]
 #[choices("Development", "QA", "UI", "Design", "BusinessIntelligence", "Networking")]
+#[convert(from)]
 pub struct Department(pub String);
 
 pub struct Regular {
