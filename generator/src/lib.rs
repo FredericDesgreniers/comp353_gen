@@ -117,7 +117,7 @@ impl Generator {
 							let task = Task {
 								employee_id: regular.employee.employee_id,
 								contract_id: contract.id,
-								task_type: String::from("Set up infrastructure for client"),
+								task_type: RandField::random(),
 								hours: 0
 							};
 
