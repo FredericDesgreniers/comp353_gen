@@ -2,6 +2,7 @@ use std::fmt::Display;
 use std::fmt::Formatter;
 use super::{Parser,ParserError};
 use models::person::PersonName;
+use models::client::ClientName;
 
 
 impl Display for PersonName {
@@ -41,5 +42,21 @@ impl Parser for PersonName {
 		} else {
 			Err(ParserError::ParsingError(String::from("Input is empty")))?
 		}
+	}
+}
+
+impl Display for ClientName {
+	fn fmt(&self, f: &mut Formatter) -> Result<(), ::std::fmt::Error> {
+		f.write_fmt(format_args!("{}", self.0))?;
+
+		Ok(())
+	}
+}
+
+impl Parser for ClientName {
+	type Output = ClientName;
+
+	fn parse(input: &str) -> Result<<Self as Parser>::Output, ParserError> {
+		Ok(ClientName(input.to_string()))
 	}
 }

@@ -25,14 +25,13 @@ pub enum StreamError {
 	EmptyStream
 }
 
-pub struct Stream<T: Parser, S> {
+pub struct Stream<T: Parser> {
 	reader: BufReader<File>,
 	buffer: Vec<T::Output>,
 	buffer_len: usize,
-	state: S
 }
 
-impl<'a, T: Parser, S> Stream<T, S> {
+impl<'a, T: Parser> Stream<T> {
 	pub fn from_file(file: File) -> Self {
 		Self {
 			reader: BufReader::new(file),
@@ -42,12 +41,15 @@ impl<'a, T: Parser, S> Stream<T, S> {
 	}
 
 	pub fn pop(&mut self) -> Result<T::Output, StreamError> {
-		if let Some(name) = self.buffer.pop() {
-			Ok(name)
-		} else {
-			self.refill()?;
-			self.pop()
+		if self.buffer.len() >= 1 {
+			if let Some(name) = self.buffer.drain((0..1)).nth(0) {
+				return Ok(name);
+			}
 		}
+
+		self.refill()?;
+		self.pop()
+
 	}
 
 	pub fn refill(&mut self) -> Result<(), StreamError> {

@@ -6,3 +6,4 @@ authors = ["Frederic Desgreniers <fredericdesgreniers@gmail.com>"]
 [dependencies]
 failure = "0.1.1"
 rand = "0.5.4"
+lazy_static = "*"
