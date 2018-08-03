@@ -1,5 +1,7 @@
 use models::person::PersonName;
 use models::ToSqls;
+use rand_field::RandField;
+use models::client::ContractType;
 
 pub struct Employee {
     pub employee_id: usize,
@@ -134,18 +136,27 @@ impl ToSqls for Manager {
         sql
     }
 }
+
+#[derive(RandField)]
+#[choices("Premium", "Silver", "Normal")]
+pub struct Insurance(pub String);
+
+#[derive(RandField)]
+#[choices("Development", "QA", "UI", "Design", "BusinessIntelligence", "Networking")]
+pub struct Department(pub String);
+
 pub struct Regular {
     pub employee: Employee,
     pub contract_id: usize,
-    pub department: String,
-    pub insurance: String,
+    pub department: Department,
+    pub insurance: Insurance,
     pub managed_by: usize,
-    pub desired_contract_type: String
+    pub desired_contract_type: ContractType
 }
 
 
 impl Regular {
-    pub fn new(employee_id: usize, name: PersonName, password: &str, contract_id: usize, department: &str, insurance: &str, managed_by: usize, desired_contract_type: &str) -> Self {
+    pub fn new(employee_id: usize, name: PersonName, password: &str, contract_id: usize, managed_by: usize, desired_contract_type: ContractType) -> Self {
         Self {
             employee: Employee {
                 employee_id,
@@ -153,10 +164,10 @@ impl Regular {
                 password: password.to_string()
             },
             contract_id,
-            department: department.to_string(),
-            insurance: insurance.to_string(),
+            department: RandField::random(),
+            insurance: RandField::random(),
             managed_by,
-            desired_contract_type: desired_contract_type.to_string()
+            desired_contract_type
         }
     }
 }
@@ -167,10 +178,10 @@ impl ToSqls for Regular {
         sql.push(format!("INSERT INTO Regular VALUES ({id}, {contract_id},{managed_by}, '{department}', '{insurance}', '{desired}');",
                          id=self.employee.employee_id,
                          contract_id=self.contract_id,
-                         department=self.department,
-                         insurance=self.insurance,
+                         department=self.department.0,
+                         insurance=self.insurance.0,
                          managed_by = self.managed_by,
-                         desired=self.desired_contract_type
+                         desired=self.desired_contract_type.0
         ));
 
         sql

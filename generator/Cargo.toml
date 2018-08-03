@@ -7,3 +7,5 @@ authors = ["Frederic Desgreniers <fredericdesgreniers@gmail.com>"]
 failure = "0.1.1"
 rand = "0.5.4"
 lazy_static = "*"
+rand_field_derive = {git="https://github.com/FredericDesgreniers/rand_field/"}
+rand_field = {git="https://github.com/FredericDesgreniers/rand_field/"}

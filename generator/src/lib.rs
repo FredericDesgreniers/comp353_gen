@@ -6,9 +6,14 @@ extern crate rand;
 #[macro_use]
 extern crate lazy_static;
 
+extern crate rand_field;
+#[macro_use]
+extern crate rand_field_derive;
+
 pub mod streams;
 pub mod models;
 
+use rand_field::RandField;
 use rand::Rng;
 use failure::Error;
 use streams::{Stream};
@@ -23,6 +28,7 @@ use models::employee::Supervisor;
 use models::employee::Manager;
 use models::employee::Regular;
 use models::task::Task;
+use models::client::ContractType;
 
 pub struct Generator {
 	name_stream: Stream<PersonName>,
@@ -86,9 +92,9 @@ impl Generator {
 						acv: 0.0,
 						ia: 0.0,
 						start_date: String::from("2017-01-01"),
-						service_type: String::from("Cloud"),
-						contract_type: String::from("Premium"),
-						line_of_business: String::from("CloudServices"),
+						service_type: RandField::random(),
+						contract_type: RandField::random(),
+						line_of_business: RandField::random(),
 						satisfaction_level: 5,
 					};
 					sqls.append(&mut contract.to_sqls());
@@ -104,7 +110,7 @@ impl Generator {
 						employee_id += 1;
 
 						for _ in create_random_range(0, &self.config.regular_employee_range) {
-							let regular = Regular::new(employee_id, self.name_stream.pop()?, "pass",contract.id, "UI", "Normal", manager.employee.employee_id, "Gold");
+							let regular = Regular::new(employee_id, self.name_stream.pop()?, "pass",contract.id, manager.employee.employee_id, contract.contract_type.clone());
 							employee_id += 1;
 							sqls.append(&mut regular.to_sqls());
 

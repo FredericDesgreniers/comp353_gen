@@ -1,5 +1,6 @@
 use super::person::PersonName;
 use models::ToSqls;
+use rand_field::RandField;
 
 pub struct ClientName(pub String);
 
@@ -53,6 +54,18 @@ impl ToSqls for Client {
 	}
 }
 
+#[derive(Clone, RandField)]
+#[choices("Premium", "Gold", "Diamond", "Silver")]
+pub struct ContractType(pub String);
+
+#[derive(RandField)]
+#[choices("Cloud", "On-premises")]
+pub struct ServiceType(pub String);
+
+#[derive(RandField)]
+#[choices("CloudServices", "Development", "Research")]
+pub struct LineOfBusiness(pub String);
+
 pub struct Contract {
 	pub id: usize,
 	pub client_id: usize,
@@ -60,9 +73,9 @@ pub struct Contract {
 	pub acv: f64,
 	pub ia: f64,
 	pub start_date: String,
-	pub service_type: String,
-	pub contract_type: String,
-	pub line_of_business: String,
+	pub service_type: ServiceType,
+	pub contract_type: ContractType,
+	pub line_of_business: LineOfBusiness,
 	pub satisfaction_level: usize
 }
 
@@ -76,9 +89,9 @@ impl ToSqls for Contract {
 				acv=self.acv,
 				ia=self.ia,
 				start_date=self.start_date,
-				service_type=self.service_type,
-				contract_type=self.contract_type,
-				line_of_business=self.line_of_business,
+				service_type=self.service_type.0,
+				contract_type=self.contract_type.0,
+				line_of_business=self.line_of_business.0,
 				satisfaction_level=self.satisfaction_level
 			)
 		]
