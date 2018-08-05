@@ -74,35 +74,6 @@ impl ToSqls for Admin {
     }
 }
 
-pub struct Supervisor {
-    pub employee: Employee,
-    pub contract_id: usize,
-}
-
-impl Supervisor {
-    pub fn new(employee_id: usize, name: PersonName, password: &str, contract_id: usize) -> Self {
-        Self {
-            employee: Employee {
-                employee_id,
-                name,
-                password: password.to_string()
-            },
-            contract_id,
-        }
-    }
-}
-
-impl ToSqls for Supervisor {
-    fn to_sqls(&self) -> Vec<String> {
-        let mut sql = self.employee.to_sqls();
-        sql.push(format!("INSERT INTO Supervisor VALUES ({id}, {contract_id});",
-                         id=self.employee.employee_id,
-                         contract_id=self.contract_id
-        ));
-
-        sql
-    }
-}
 
 pub struct Manager {
     pub employee: Employee,

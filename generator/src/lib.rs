@@ -24,7 +24,6 @@ use std::ops::Range;
 use models::employee::SalesAssociate;
 use rand::ThreadRng;
 use models::client::Contract;
-use models::employee::Supervisor;
 use models::employee::Manager;
 use models::employee::Regular;
 use models::task::Task;
@@ -88,6 +87,7 @@ impl Generator {
 					let contract = Contract {
 						id: contract_id,
 						client_id: client.id,
+						supervised_by: sales_associate.employee.employee_id,
 						contact_num: String::from("5149108628"),
 						acv: 0.0,
 						ia: 0.0,
@@ -100,12 +100,8 @@ impl Generator {
 					sqls.append(&mut contract.to_sqls());
 					contract_id += 1;
 
-					let supervisor = Supervisor::new(employee_id, self.name_stream.pop()?, "pass123", contract.id);
-					sqls.append(&mut supervisor.to_sqls());
-					employee_id += 1;
-
 					for _ in create_random_range(0, &self.config.manager_range) {
-						let manager = Manager::new(employee_id, self.name_stream.pop()?, "other_pass", contract.id, supervisor.employee.employee_id);
+						let manager = Manager::new(employee_id, self.name_stream.pop()?, "other_pass", contract.id, sales_associate.employee.employee_id);
 						sqls.append(&mut manager.to_sqls());
 						employee_id += 1;
 

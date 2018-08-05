@@ -89,6 +89,7 @@ impl RandField for Date {
 pub struct Contract {
 	pub id: usize,
 	pub client_id: usize,
+	pub supervised_by: usize,
 	pub contact_num: String,
 	pub acv: f64,
 	pub ia: f64,
@@ -102,9 +103,10 @@ pub struct Contract {
 impl ToSqls for Contract {
 	fn to_sqls(&self) -> Vec<String> {
         vec![
-			format!("INSERT INTO Contracts VALUES ({id}, {client_id}, '{contact_num}', {acv}, {ia}, '{start_date}', '{service_type}', '{contract_type}', '{line_of_business}', {satisfaction_level});",
+			format!("INSERT INTO Contracts VALUES ({id}, {client_id}, {supervised_by}, '{contact_num}', {acv}, {ia}, '{start_date}', '{service_type}', '{contract_type}', '{line_of_business}', {satisfaction_level});",
 				id=self.id,
 				client_id=self.client_id,
+				supervised_by=self.supervised_by,
 				contact_num=self.contact_num,
 				acv=self.acv,
 				ia=self.ia,
